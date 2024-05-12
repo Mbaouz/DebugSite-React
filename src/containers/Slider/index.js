@@ -10,11 +10,16 @@ const Slider = () => {
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   );
+
+  
   const nextCard = () => {
+
+    if (byDateDesc !== undefined) {    
     setTimeout(
-      () => setIndex(index < byDateDesc.length ? index + 1 : 0),
+      () => setIndex(index < byDateDesc.length - 1  ? index + 1 : 0),
       5000
-    );
+
+    );}
   };
   useEffect(() => {
     nextCard();
@@ -24,10 +29,8 @@ const Slider = () => {
       {byDateDesc?.map((event, idx) => (
         <>
           <div
-            key={event.title}
-            className={`SlideCard SlideCard--${
-              index === idx ? "display" : "hide"
-            }`}
+            key={event.date}
+            className={`SlideCard SlideCard--${ index === idx ? "display" : "hide" }`}
           >
             <img src={event.cover} alt="forum" />
             <div className="SlideCard__descriptionContainer">
@@ -40,13 +43,15 @@ const Slider = () => {
           </div>
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {byDateDesc.map((_, radioIdx) => (
+              {byDateDesc.map((test,radioIdx ) => ( //* redefinition du 1er paramètre pour la key
                 <input
-                  key={`${event.id}`}
+                  key={test.title} //* correction erreur sur la key
                   type="radio"
                   name="radio-button"
-                  checked={idx === radioIdx}
+                  checked={index === radioIdx} //* correction variable d'état (mal definie)
+                  readOnly //* correction erreur console
                 />
+                
               ))}
             </div>
           </div>
